@@ -21,15 +21,15 @@ func main() {
 	// setup functions for access from js side
 	goFuncs := js.Global().Get("window").Get("goFuncs")
 
-	goFuncs.Set("listKeys", js.FuncOf(listKeys))
-	goFuncs.Set("listKeysFiltered", js.FuncOf(listKeysFiltered))
-	goFuncs.Set("newKeyRequest", js.FuncOf(newKeyRequest))
-	goFuncs.Set("newUpdater", js.FuncOf(newUpdater))
-	goFuncs.Set("checkKeyStatus", js.FuncOf(checkKeyStatus))
-	goFuncs.Set("findDOHEndpoint", js.FuncOf(findDOHEndpoint))
-	goFuncs.Set("query", js.FuncOf(query))
-	goFuncs.Set("setDefaultDOHResolver", js.FuncOf(setDefaultDOHResolver))
-	goFuncs.Set("getDefaultDOHResolver", js.FuncOf(getDefaultDOHResolver))
+	goFuncs.Set("listKeys", js.FuncOf(ListKeys))
+	goFuncs.Set("listKeysFiltered", js.FuncOf(ListKeysFiltered))
+	goFuncs.Set("newKeyRequest", js.FuncOf(NewKeyRequest))
+	goFuncs.Set("newUpdater", js.FuncOf(NewUpdater))
+	goFuncs.Set("checkKeyStatus", js.FuncOf(CheckKeyStatus))
+	goFuncs.Set("findDOHEndpoint", js.FuncOf(FindDOHEndpoint))
+	goFuncs.Set("query", js.FuncOf(Query))
+	goFuncs.Set("setDefaultDOHResolver", js.FuncOf(SetDefaultDOHResolver))
+	goFuncs.Set("getDefaultDOHResolver", js.FuncOf(GetDefaultDOHResolver))
 
 	// cant let main return
 	forever := make(chan bool)
@@ -39,7 +39,8 @@ func main() {
 // Key Managment
 // =============
 
-// listKeys()
+// ListKeys
+//
 // arguments: 0
 // Returns an array of JSON objects of all Keystore keys
 //
@@ -47,7 +48,7 @@ func main() {
 //	  Name: <filename prefix of key pair in nsupdate format>
 //	  Key:  <public key of key pair in DNS RR format>
 //	}
-func listKeys(_ js.Value, _ []js.Value) any {
+func ListKeys(_ js.Value, _ []js.Value) any {
 	keys, err := sig0.ListKeys(".")
 	check(err)
 	var values = make([]any, len(keys))
@@ -70,7 +71,7 @@ func listKeys(_ js.Value, _ []js.Value) any {
 //	  Name: <filename prefix of key pair in nsupdate format>
 //	  Key:  <public key of key pair in DNS RR format>
 //	}
-func listKeysFiltered(_ js.Value, args []js.Value) any {
+func ListKeysFiltered(_ js.Value, args []js.Value) any {
 	if len(args) != 1 {
 		return "expected 1 argument: searchDomain"
 	}
@@ -99,7 +100,7 @@ func listKeysFiltered(_ js.Value, args []js.Value) any {
 //		"QueuePTRExists": true|false,
 //		"KeyRRExists":    true|false
 //	}
-func checkKeyStatus(_ js.Value, args []js.Value) any {
+func CheckKeyStatus(_ js.Value, args []js.Value) any {
 	if len(args) != 3 {
 		return "expected 3 arguments: keystore key filename prefix, zone and dohServer"
 	}
@@ -221,7 +222,7 @@ func checkKeyStatus(_ js.Value, args []js.Value) any {
 	return promiseConstructor.New(handler)
 }
 
-func findDOHEndpoint(_ js.Value, args []js.Value) any {
+func FindDOHEndpoint(_ js.Value, args []js.Value) any {
 	handler := js.FuncOf(func(this js.Value, promises []js.Value) interface{} {
 		resolve := promises[0]
 		reject := promises[1]
@@ -254,7 +255,7 @@ func findDOHEndpoint(_ js.Value, args []js.Value) any {
 // create a keypair and request a key
 // arguments: the name to request
 // returns nill or an error string
-func newKeyRequest(_ js.Value, args []js.Value) any {
+func NewKeyRequest(_ js.Value, args []js.Value) any {
 	handler := js.FuncOf(func(this js.Value, promises []js.Value) interface{} {
 		resolve := promises[0]
 		reject := promises[1]
@@ -300,7 +301,7 @@ func newKeyRequest(_ js.Value, args []js.Value) any {
 //		addRR, deleteRR, deleteRRset, deleteName
 //		signedUpdate, unsignedUpdate
 //	}
-func newUpdater(_ js.Value, args []js.Value) any {
+func NewUpdater(_ js.Value, args []js.Value) any {
 	if len(args) != 3 {
 		panic("expected 3 arguments: keyName, zone, dohHostname")
 	}
@@ -456,7 +457,7 @@ arguments:
   - string: dns RRtype, defaults to A
   - object: {type, dohurl}
 */
-func query(_ js.Value, args []js.Value) any {
+func Query(_ js.Value, args []js.Value) any {
 	handler := js.FuncOf(func(this js.Value, promises []js.Value) interface{} {
 		resolve := promises[0]
 		reject := promises[1]
@@ -549,7 +550,7 @@ func query(_ js.Value, args []js.Value) any {
 	return promiseConstructor.New(handler)
 }
 
-func setDefaultDOHResolver(_ js.Value, args []js.Value) any {
+func SetDefaultDOHResolver(_ js.Value, args []js.Value) any {
 	if len(args) != 1 {
 		return "expected 1 argument: dohResolverHostname"
 	}
@@ -558,7 +559,7 @@ func setDefaultDOHResolver(_ js.Value, args []js.Value) any {
 	return nil
 }
 
-func getDefaultDOHResolver(_ js.Value, args []js.Value) any {
+func GetDefaultDOHResolver(_ js.Value, args []js.Value) any {
 	return sig0.DefaultDOHResolver
 }
 
