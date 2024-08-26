@@ -12,3 +12,8 @@ bind9/ansible/ansible_ssh_key*
 # exceptions to the rule
 !keystore/.keep
 !zones/.keep
+# golang
+cmd/sig0namectl/sig0namectl
+wasm/demo.wasm
+wasm/nohup.out
+K*.private
