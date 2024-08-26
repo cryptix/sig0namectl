@@ -11,7 +11,7 @@ import (
 	"github.com/davecgh/go-spew/spew"
 	"github.com/miekg/dns"
 
-	"github.com/NetworkCommons/sig0namectl/sig0"
+	"github.com/cryptix/sig0namectl/sig0"
 )
 
 // Go <-> JS bridging setup

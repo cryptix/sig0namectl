@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/NetworkCommons/sig0namectl/sig0"
+	"github.com/cryptix/sig0namectl/sig0"
 	"github.com/urfave/cli/v2"
 )
 

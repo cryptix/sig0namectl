@@ -8,7 +8,7 @@ import (
 
 	"github.com/urfave/cli/v2"
 
-	"github.com/NetworkCommons/sig0namectl/sig0"
+	"github.com/cryptix/sig0namectl/sig0"
 )
 
 var updateCmd = &cli.Command{

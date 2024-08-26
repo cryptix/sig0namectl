@@ -7,7 +7,7 @@ import (
 	// "strconv"
 	// "strings"
 
-	"github.com/NetworkCommons/sig0namectl/sig0"
+	"github.com/cryptix/sig0namectl/sig0"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/miekg/dns"
 	"github.com/urfave/cli/v2"

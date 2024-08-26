@@ -1,4 +1,4 @@
-module github.com/NetworkCommons/sig0namectl
+module github.com/cryptix/sig0namectl
 
 go 1.21.0
 
